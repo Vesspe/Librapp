@@ -1,5 +1,6 @@
 package com.example.librapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
@@ -83,11 +84,23 @@ public class MainActivity extends AppCompatActivity {
 
     public void send(View view) {  //fill db for tests
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
         Book book = new Book("myAuthor", "myTitle", "983-234-234", "fiction");
         for(int counter=0;counter<10; counter++){
-            DatabaseReference myRef = database.getReference("Books/"+ counter);
+            /*DatabaseReference myRef = database.getReference("Books/"+ counter);
             myRef.setValue(book);
+            book.isbn.*/
+            myRef.child("Books")
+                    .child(book.isbn)
+                    .setValue(book);
         }
+    }
+
+    public void logout(View view) {
+        //TODO some warning before logout
+        mAuth.signOut();
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 
 

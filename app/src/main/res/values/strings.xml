@@ -23,4 +23,5 @@
     <string name="RegisterMessage">Become a member</string>
     <string name="username">Username</string>
     <string name="useravatar">UserAvatar</string>
+    <string name="log_out">Log out</string>
 </resources>
