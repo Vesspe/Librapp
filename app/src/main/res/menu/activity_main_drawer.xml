@@ -17,9 +17,14 @@
             android:icon="@drawable/ic_storage_black_24dp"
             android:title="@string/menu_books" />
         <item
+            android:id="@+id/nav_scanner"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Scanner"/>
+        <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="Settings"
             />
+
     </group>
 </menu>

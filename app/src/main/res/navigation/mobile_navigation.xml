@@ -18,10 +18,17 @@
         tools:layout="@layout/fragment_search" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_books"
         android:name="com.example.librapp.ui.books.BooksFragment"
         android:label="@string/menu_books"
         tools:layout="@layout/fragment_books" />
+
+    <fragment
+        android:id="@+id/nav_scanner"
+        android:name="com.example.librapp.ui.scanner.ScannerFragment"
+        android:label="Scanner"
+        tools:layout="@layout/fragment_scanner"/>
+
     <fragment
         android:id="@+id/nav_settings"
         android:name="com.example.librapp.ui.settings.SettingsFragment"

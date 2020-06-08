@@ -31,7 +31,12 @@ public class FirebaseDatabaseHelper {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 books.clear();
                 List<String> keys = new ArrayList<>();
-
+                for(DataSnapshot keyNode : dataSnapshot.getChildren()){
+                    keys.add(keyNode.getKey());
+                    Book book = keyNode.getValue(Book.class);
+                    books.add(book);
+                }
+                dataStatus.DataIsLoaded(books, keys);
             }
 
             @Override

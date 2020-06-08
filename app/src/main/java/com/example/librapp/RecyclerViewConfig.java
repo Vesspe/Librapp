@@ -1,6 +1,7 @@
 package com.example.librapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.util.List;
 
 
 public class RecyclerViewConfig extends FragmentActivity{
+    private Context mContext;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter bookAdapter;
@@ -29,9 +31,17 @@ public class RecyclerViewConfig extends FragmentActivity{
         recyclerView.setLayoutManager(layoutManager);
 
         //TODO specify adapter here
-        bookAdapter = new BookAdapter();
-        recyclerView.setAdapter(bookAdapter);
+        /*bookAdapter = new BookAdapter();
+        recyclerView.setAdapter(bookAdapter);*/
 
+    }
+
+    public void setConfig(RecyclerView recyclerView, Context context, List<Book> books, List<String> keys){
+        mContext = context;
+        bookAdapter = new BookAdapter(books, keys);
+        this.recyclerView = recyclerView;
+        this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        this.recyclerView.setAdapter(bookAdapter);
     }
 
     class BookItemView extends RecyclerView.ViewHolder{
@@ -43,10 +53,10 @@ public class RecyclerViewConfig extends FragmentActivity{
 
         public BookItemView(@NonNull View itemView) {
             super(itemView);
-            mTitle = findViewById(R.id.title_textView);
-            mAuthor = findViewById(R.id.author_textView);
-            mCategory = findViewById(R.id.category_textView);
-            mIsbn = findViewById(R.id.isbn_textView);
+            mTitle = itemView.findViewById(R.id.title_textView);
+            mAuthor = itemView.findViewById(R.id.author_textView);
+            mCategory = itemView.findViewById(R.id.category_textView);
+            mIsbn = itemView.findViewById(R.id.isbn_textView);
         }
 
         public void bind (Book book, String key){
@@ -64,9 +74,10 @@ public class RecyclerViewConfig extends FragmentActivity{
         private List<Book> mBookList;
         private List<String> mKeys;
 
-        public BookAdapter(){//(List<Book> mBookList, List<String> mKeys) {
-            //this.mBookList = mBookList;
-            //this.mKeys = mKeys;
+        public BookAdapter(List<Book> mBookList , List<String> mKeys)
+        {
+            this.mBookList = mBookList;
+            this.mKeys = mKeys;
         }
 
         @NonNull
@@ -78,12 +89,13 @@ public class RecyclerViewConfig extends FragmentActivity{
 
         @Override
         public void onBindViewHolder(@NonNull BookItemView holder, int position) {
-
+            holder.bind(mBookList.get(position), mKeys.get(position));
+            //TODO clicklistener
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return mBookList.size();
         }
     }
 }

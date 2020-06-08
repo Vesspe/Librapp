@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_search, R.id.nav_slideshow, R.id.nav_settings)
+                R.id.nav_home, R.id.nav_search, R.id.nav_books, R.id.nav_settings, R.id.nav_scanner)
                 .setDrawerLayout(drawer)
                 .build();
 
@@ -57,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
     public void onStart(){
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser== null) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
         updateUI(currentUser);
 
     }
