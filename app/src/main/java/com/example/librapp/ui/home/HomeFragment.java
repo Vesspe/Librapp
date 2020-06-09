@@ -9,10 +9,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.librapp.Book;
@@ -35,6 +37,12 @@ public class HomeFragment extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_home, container, false);
         mRecyclerView =root.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
+
+        DividerItemDecoration itemDecorator = new DividerItemDecoration(root.getContext(), DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.divider));
+
+        mRecyclerView.addItemDecoration(itemDecorator);
+
 
         new FirebaseDatabaseHelper().loadBooks(new FirebaseDatabaseHelper.dataStatus() {
             @Override

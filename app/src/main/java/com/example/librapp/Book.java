@@ -1,11 +1,15 @@
 package com.example.librapp;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
 
     String author;
     String title;
     String isbn;
     String category;
+    String desc;
+
 
     //TODO future ideas
     /*String desc;
@@ -16,11 +20,14 @@ public class Book {
     public Book() {
     }
 
-    public Book(String author, String title, String isbn, String category) {
+
+
+    public Book(String author, String title, String isbn, String category, String desc) {
         this.author = author;
         this.title = title;
         this.isbn = isbn;
         this.category = category;
+        this. desc = desc;
     }
 
     public String getAuthor() {
@@ -54,4 +61,14 @@ public class Book {
     public void setCategory(String category) {
         this.category = category;
     }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+
 }

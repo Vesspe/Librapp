@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -85,20 +86,21 @@ public class MainActivity extends AppCompatActivity {
         userEmail.setText(user.getEmail());
     }
 
-
-    public void send(View view) {  //fill db for tests
+    //simple method to fill db
+    /*public void send(View view) {  //fill db for tests
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
         Book book = new Book("myAuthor", "myTitle", "983-234-234", "fiction");
         for(int counter=0;counter<10; counter++){
-            /*DatabaseReference myRef = database.getReference("Books/"+ counter);
+            *//*DatabaseReference myRef = database.getReference("Books/"+ counter);
             myRef.setValue(book);
-            book.isbn.*/
+            book.isbn.*//*
             myRef.child("Books")
                     .child(book.isbn)
                     .setValue(book);
         }
-    }
+    }*/
+
 
     public void logout(View view) {
         //TODO some warning before logout
@@ -108,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /*public void searchBook(View view) {
+        EditText editText = findViewById(R.id.editText_search_book);
 
-
+    }*/
 }

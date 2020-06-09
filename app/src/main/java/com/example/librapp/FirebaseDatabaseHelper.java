@@ -45,4 +45,27 @@ public class FirebaseDatabaseHelper {
             }
         });
     }
+
+    public void searchBook(final dataStatus dataStatus, final String query){
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                books.clear();
+                List<String> keys = new ArrayList<>();
+                for(DataSnapshot keyNode : dataSnapshot.getChildren()){
+                    keys.add(keyNode.getKey());
+                    Book book = keyNode.getValue(Book.class);
+                    if(book.getAuthor().equalsIgnoreCase(query)|| book.getCategory().equalsIgnoreCase(query) || book.getIsbn().equals(query) || book.getTitle().equalsIgnoreCase(query)) {
+                        books.add(book);
+                    }
+                }
+                dataStatus.DataIsLoaded(books, keys);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

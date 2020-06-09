@@ -2,25 +2,35 @@ package com.example.librapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.librapp.ui.scanner.ScannerFragment;
 
 import java.util.List;
 
 
-public class RecyclerViewConfig extends FragmentActivity{
+public class RecyclerViewConfig extends FragmentActivity {
     private Context mContext;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter bookAdapter;
+    private View.OnClickListener onItemClickListener;
+    private List<Book> secondlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -29,10 +39,6 @@ public class RecyclerViewConfig extends FragmentActivity{
         recyclerView = findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-
-        //TODO specify adapter here
-        /*bookAdapter = new BookAdapter();
-        recyclerView.setAdapter(bookAdapter);*/
 
     }
 
@@ -57,7 +63,24 @@ public class RecyclerViewConfig extends FragmentActivity{
             mAuthor = itemView.findViewById(R.id.author_textView);
             mCategory = itemView.findViewById(R.id.category_textView);
             mIsbn = itemView.findViewById(R.id.isbn_textView);
+            itemView.setOnClickListener(onItemClickListener);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e("clicked", "position"+getAdapterPosition());
+                    Toast.makeText(mContext, "clicked " + getAdapterPosition(), Toast.LENGTH_LONG).show();
+                    Book book = secondlist.get(getAdapterPosition());
+                    Intent intent = new Intent (v.getContext(), BookDetails.class);
+                    intent.putExtra("Book", book);
+                    v.getContext().startActivity(intent);
+
+
+                }
+            });
         }
+
+
 
         public void bind (Book book, String key){
             mTitle.setText(book.getTitle());
@@ -66,39 +89,78 @@ public class RecyclerViewConfig extends FragmentActivity{
             mIsbn.setText(book.getIsbn());
             this.key = key;
         }
+
+
+
     }
 
 
 
-    class BookAdapter extends RecyclerView.Adapter<BookItemView>{
+    class BookAdapter extends RecyclerView.Adapter<BookItemView> {
         private List<Book> mBookList;
         private List<String> mKeys;
+        //private final OnClickListener mOnClickListener = new MyOnClickListener();
 
         public BookAdapter(List<Book> mBookList , List<String> mKeys)
         {
             this.mBookList = mBookList;
             this.mKeys = mKeys;
+            secondlist = mBookList;
         }
 
         @NonNull
         @Override
         public BookItemView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new BookItemView(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.booklist_item, parent, false));
+            BookItemView view = new BookItemView(LayoutInflater.from(parent.getContext()).inflate(R.layout.booklist_item, parent, false));
+                    return view;
         }
 
         @Override
-        public void onBindViewHolder(@NonNull BookItemView holder, int position) {
+        public void onBindViewHolder(@NonNull BookItemView holder, final int position) {
             holder.bind(mBookList.get(position), mKeys.get(position));
             //TODO clicklistener
+            /*holder.setItemClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Book book = mBookList.get(position);
+                    Intent intent = new Intent (v.getContext(), BookDetails.class);
+                    intent.putExtra("Book", book);
+                    v.getContext().startActivity(intent);
+                }
+            });*/
+
+        /*itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e("clicked", "position"+getAdapterPosition());
+                    Toast.makeText(mContext, "clicked " + getAdapterPosition(), Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent (v.getContext(), BookDetails.class);
+                    v.getContext().startActivity(intent);
+
+
+                }
+            });*/
+
         }
 
         @Override
         public int getItemCount() {
             return mBookList.size();
         }
+
+        public Book getBook(int position){
+            return mBookList.get(position);
+        }
+
+
     }
+
+
+
+
 }
+
+
 
 /*public class RecyclerViewConfig extends FragmentActivity {
     private RecyclerView recyclerView;
