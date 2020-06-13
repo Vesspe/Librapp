@@ -100,7 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                 FirebaseUser firebaseUser = mAuth.getCurrentUser();
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                //updateUI(user);
+                                startActivity(intent);
 
                             } else {
                                 //sign in fail

@@ -115,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
         View headerView = navigationView.getHeaderView(0);
         userEmail = headerView.findViewById(R.id.userEmail);
         userEmail.setText(user.getEmail());
+        TextView username = headerView.findViewById(R.id.userName);
+        username.setText(user.getDisplayName());
 
 
     }
