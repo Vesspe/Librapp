@@ -1,11 +1,16 @@
 package com.example.librapp;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -15,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -39,6 +45,31 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         mAuth = FirebaseAuth.getInstance();
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
+
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+            }
+        });
 
 
         navigationView = findViewById(R.id.nav_view);
@@ -84,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
         View headerView = navigationView.getHeaderView(0);
         userEmail = headerView.findViewById(R.id.userEmail);
         userEmail.setText(user.getEmail());
+
+
     }
 
     //simple method to fill db
@@ -92,9 +125,9 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference myRef = database.getReference();
         Book book = new Book("myAuthor", "myTitle", "983-234-234", "fiction");
         for(int counter=0;counter<10; counter++){
-            *//*DatabaseReference myRef = database.getReference("Books/"+ counter);
+            DatabaseReference myRef = database.getReference("Books/"+ counter);
             myRef.setValue(book);
-            book.isbn.*//*
+            book.isbn.
             myRef.child("Books")
                     .child(book.isbn)
                     .setValue(book);
@@ -109,9 +142,22 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-    /*public void searchBook(View view) {
-        EditText editText = findViewById(R.id.editText_search_book);
-
+    /*private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }*/
+
+
+
 }

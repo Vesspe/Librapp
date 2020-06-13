@@ -1,6 +1,5 @@
 package com.example.librapp.ui.search;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,16 +15,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.librapp.Book;
+import com.example.librapp.BookModel;
 import com.example.librapp.FirebaseDatabaseHelper;
 import com.example.librapp.R;
 import com.example.librapp.RecyclerViewConfig;
+import com.example.librapp.RentBookModel;
+import com.example.librapp.UserModel;
 
 import java.util.List;
 
@@ -38,6 +40,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     private RecyclerView mRecyclerView;
     private ProgressBar progressBar;
     private View root;
+    private DrawerLayout drawerLayout;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -55,7 +58,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         itemDecorator.setDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.divider));
 
         mRecyclerView.addItemDecoration(itemDecorator);
-        mRecyclerView.addOnItemTouchListener(
+        /*mRecyclerView.addOnItemTouchListener(
                 new RecyclerView.OnItemTouchListener() {
                     @Override
                     public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
@@ -72,7 +75,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
                     }
                 }
-        );
+        );*/
 
         searchViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -82,21 +85,48 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         });
         Button search = root.findViewById(R.id.button_search_book);
         search.setOnClickListener(this);
+
+
+
         return root;
     }
 
     @Override
     public void onClick(View v) {
+        //notification attempt
+        /*NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.notification_icon)
+                .setContentTitle(textTitle)
+                .setContentText(textContent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);*/
         switch (v.getId()) {
             case R.id.button_search_book:
 
                 String query = editTextSearch.getText().toString();
                 progressBar.setVisibility(View.VISIBLE);
+
+
                 new FirebaseDatabaseHelper().searchBook(new FirebaseDatabaseHelper.dataStatus() {
                     @Override
-                    public void DataIsLoaded(List<Book> books, List<String> keys) {
+                    public void DataIsLoaded(List<BookModel> bookModels, List<String> keys) {
                         progressBar.setVisibility(View.GONE);
-                        new RecyclerViewConfig().setConfig(mRecyclerView, getActivity(), books, keys);
+                        new RecyclerViewConfig().setConfig(mRecyclerView, getActivity(), bookModels, keys);
+                    }
+
+                    @Override
+                    public void DataIsLoaded(List<RentBookModel> rentBookModels) {
+
+                    }
+
+                    @Override
+                    public void DataIsEmpty() {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "No books founded", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void UserFound(UserModel getuser) {
+
                     }
                 }, query);
                 InputMethodManager inputMethodManager = (InputMethodManager) root.getContext().getSystemService(INPUT_METHOD_SERVICE);

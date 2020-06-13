@@ -1,25 +1,18 @@
 package com.example.librapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.librapp.ui.scanner.ScannerFragment;
 
 import java.util.List;
 
@@ -30,7 +23,7 @@ public class RecyclerViewConfig extends FragmentActivity {
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter bookAdapter;
     private View.OnClickListener onItemClickListener;
-    private List<Book> secondlist;
+    private List<BookModel> secondlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -42,9 +35,9 @@ public class RecyclerViewConfig extends FragmentActivity {
 
     }
 
-    public void setConfig(RecyclerView recyclerView, Context context, List<Book> books, List<String> keys){
+    public void setConfig(RecyclerView recyclerView, Context context, List<BookModel> bookModels, List<String> keys){
         mContext = context;
-        bookAdapter = new BookAdapter(books, keys);
+        bookAdapter = new BookAdapter(bookModels, keys);
         this.recyclerView = recyclerView;
         this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         this.recyclerView.setAdapter(bookAdapter);
@@ -69,25 +62,23 @@ public class RecyclerViewConfig extends FragmentActivity {
                 @Override
                 public void onClick(View v) {
                     Log.e("clicked", "position"+getAdapterPosition());
-                    Toast.makeText(mContext, "clicked " + getAdapterPosition(), Toast.LENGTH_LONG).show();
-                    Book book = secondlist.get(getAdapterPosition());
-                    Intent intent = new Intent (v.getContext(), BookDetails.class);
-                    intent.putExtra("Book", book);
+                    BookModel bookModel = secondlist.get(getAdapterPosition());
+                    Intent intent = new Intent (v.getContext(), BookDetailsActivity.class);
+                    intent.putExtra("Book", bookModel);
                     v.getContext().startActivity(intent);
-
-
                 }
             });
         }
 
 
 
-        public void bind (Book book, String key){
-            mTitle.setText(book.getTitle());
-            mAuthor.setText(book.getAuthor());
-            mCategory.setText(book.getCategory());
-            mIsbn.setText(book.getIsbn());
+        public void bind (BookModel bookModel, String key){
+            mTitle.setText(bookModel.getTitle());
+            mAuthor.setText(bookModel.getAuthor());
+            mCategory.setText(bookModel.getCategory());
+            mIsbn.setText(bookModel.getIsbn());
             this.key = key;
+
         }
 
 
@@ -97,59 +88,36 @@ public class RecyclerViewConfig extends FragmentActivity {
 
 
     class BookAdapter extends RecyclerView.Adapter<BookItemView> {
-        private List<Book> mBookList;
+        private List<BookModel> mBookModelList;
         private List<String> mKeys;
-        //private final OnClickListener mOnClickListener = new MyOnClickListener();
 
-        public BookAdapter(List<Book> mBookList , List<String> mKeys)
+        public BookAdapter(List<BookModel> mBookModelList, List<String> mKeys)
         {
-            this.mBookList = mBookList;
+            this.mBookModelList = mBookModelList;
             this.mKeys = mKeys;
-            secondlist = mBookList;
+            secondlist = mBookModelList;
         }
 
         @NonNull
         @Override
         public BookItemView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            BookItemView view = new BookItemView(LayoutInflater.from(parent.getContext()).inflate(R.layout.booklist_item, parent, false));
-                    return view;
+            return new BookItemView(LayoutInflater.from(parent.getContext()).inflate(R.layout.booklist_item, parent, false));
+
         }
 
         @Override
         public void onBindViewHolder(@NonNull BookItemView holder, final int position) {
-            holder.bind(mBookList.get(position), mKeys.get(position));
-            //TODO clicklistener
-            /*holder.setItemClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Book book = mBookList.get(position);
-                    Intent intent = new Intent (v.getContext(), BookDetails.class);
-                    intent.putExtra("Book", book);
-                    v.getContext().startActivity(intent);
-                }
-            });*/
-
-        /*itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.e("clicked", "position"+getAdapterPosition());
-                    Toast.makeText(mContext, "clicked " + getAdapterPosition(), Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent (v.getContext(), BookDetails.class);
-                    v.getContext().startActivity(intent);
-
-
-                }
-            });*/
+            holder.bind(mBookModelList.get(position), mKeys.get(position));
 
         }
 
         @Override
         public int getItemCount() {
-            return mBookList.size();
+            return mBookModelList.size();
         }
 
-        public Book getBook(int position){
-            return mBookList.get(position);
+        public BookModel getBook(int position){
+            return mBookModelList.get(position);
         }
 
 

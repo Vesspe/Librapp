@@ -3,7 +3,6 @@ package com.example.librapp.ui.scanner;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.Manifest;
 import android.content.Intent;
@@ -13,7 +12,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,12 +19,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.librapp.Book;
-import com.example.librapp.BookDetails;
+import com.example.librapp.BookModel;
+import com.example.librapp.BookDetailsActivity;
 import com.example.librapp.FirebaseDatabaseHelper;
-import com.example.librapp.MainActivity;
 import com.example.librapp.R;
-import com.example.librapp.RecyclerViewConfig;
+import com.example.librapp.RentBookModel;
+import com.example.librapp.UserModel;
 import com.google.zxing.Result;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -38,8 +36,6 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import java.util.List;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
-
-import static android.Manifest.permission_group.CAMERA;
 
 public class ScannerFragment extends Fragment implements ZXingScannerView.ResultHandler{
 
@@ -104,13 +100,28 @@ public class ScannerFragment extends Fragment implements ZXingScannerView.Result
         String query = rawResult.getText();
         new FirebaseDatabaseHelper().searchBook(new FirebaseDatabaseHelper.dataStatus() {
             @Override
-            public void DataIsLoaded(List<Book> books, List<String> keys) {
+            public void DataIsLoaded(List<BookModel> bookModels, List<String> keys) {
                 //progressBar.setVisibility(View.GONE);
                 //new RecyclerViewConfig().setConfig(mRecyclerView, getActivity(), books, keys);
-                Book book = books.get(0);
-                Intent intent = new Intent (getContext(), BookDetails.class);
-                intent.putExtra("Book", book);
+                BookModel bookModel = bookModels.get(0);
+                Intent intent = new Intent (getContext(), BookDetailsActivity.class);
+                intent.putExtra("Book", bookModel);
                 getContext().startActivity(intent);
+
+            }
+
+            @Override
+            public void DataIsLoaded(List<RentBookModel> rentBookModels) {
+
+            }
+
+            @Override
+            public void DataIsEmpty() {
+
+            }
+
+            @Override
+            public void UserFound(UserModel getuser) {
 
             }
         }, query);

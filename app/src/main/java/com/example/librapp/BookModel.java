@@ -2,7 +2,7 @@ package com.example.librapp;
 
 import java.io.Serializable;
 
-public class Book implements Serializable {
+public class BookModel implements Serializable {
 
     String author;
     String title;
@@ -12,23 +12,26 @@ public class Book implements Serializable {
 
 
     //TODO future ideas
-    /*String desc;
+    /*
     double rating;
-    String image;
-    String id;*/
+    String image;;*/
 
-    public Book() {
+
+    //to create an empty list object
+    public BookModel() {
+
     }
 
 
 
-    public Book(String author, String title, String isbn, String category, String desc) {
+    public BookModel(String author, String title, String isbn, String category, String desc) {
         this.author = author;
         this.title = title;
         this.isbn = isbn;
         this.category = category;
         this. desc = desc;
     }
+
 
     public String getAuthor() {
         return author;

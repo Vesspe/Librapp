@@ -7,25 +7,29 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
-public class BookDetails extends AppCompatActivity {
+public class BookDetailsActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth mAuth;
     private NavigationView navigationView;
+    private BookModel bookModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +38,9 @@ public class BookDetails extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
-        Book book = (Book)intent.getSerializableExtra("Book");
+        bookModel = (BookModel) intent.getSerializableExtra("Book");
         TextView bookDesc = findViewById(R.id.textView_book_desc);
-        bookDesc.setText(book.getDesc());
+        bookDesc.setText(bookModel.getDesc());
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -57,6 +61,33 @@ public class BookDetails extends AppCompatActivity {
             }
         });
 
+
+    }
+
+
+    public void borrowBook(View v) {
+        //getting database references
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("BorrowedBooks").push();
+        mAuth = FirebaseAuth.getInstance();
+
+        final String userId = mAuth.getCurrentUser().getUid();
+        final String bookId = bookModel.getIsbn();
+        Date currentTime = Calendar.getInstance().getTime();
+        RentBookModel rentBook = new RentBookModel(bookId, currentTime, userId);
+        myRef.setValue(rentBook);
+
+
+
+
+        /*FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        myRef.child("Users")
+                .child(userId)
+                .child("userBorrowedBooks")*/
+
+
+        //UserModel user = new UserModel(userId, mAuth.getCurrentUser().getEmail(),mAuth.getCurrentUser().get)
 
     }
 }

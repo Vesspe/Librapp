@@ -9,7 +9,7 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_search">Search</string>
-    <string name="menu_books">Your books</string>
+    <string name="menu_books">Borrowed books</string>
 
     <string name="title_activity_login">LoginActivity</string>
     <!-- Strings used for fragments for navigation -->
@@ -41,9 +41,7 @@
     <string name="searchBookButton">Search</string>
     <string name="title_activity_book_details">BookDetails</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="rent_button">Borrow book</string>
+    <string name="borrowBook">Borrow book</string>
 </resources>

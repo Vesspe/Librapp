@@ -4,24 +4,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.librapp.Book;
+import com.example.librapp.BookModel;
 import com.example.librapp.FirebaseDatabaseHelper;
 import com.example.librapp.R;
 import com.example.librapp.RecyclerViewConfig;
-import com.example.librapp.ui.settings.SettingsViewModel;
+import com.example.librapp.RentBookModel;
+import com.example.librapp.UserModel;
 
 import java.util.List;
 
@@ -46,9 +42,24 @@ public class HomeFragment extends Fragment {
 
         new FirebaseDatabaseHelper().loadBooks(new FirebaseDatabaseHelper.dataStatus() {
             @Override
-            public void DataIsLoaded(List<Book> books, List<String> keys) {
+            public void DataIsLoaded(List<BookModel> bookModels, List<String> keys) {
                 root.findViewById(R.id.loading_books_pb).setVisibility(View.GONE);
-                new RecyclerViewConfig().setConfig(mRecyclerView, getActivity(), books, keys);
+                new RecyclerViewConfig().setConfig(mRecyclerView, getActivity(), bookModels, keys);
+            }
+
+            @Override
+            public void DataIsLoaded(List<RentBookModel> rentBookModels) {
+
+            }
+
+            @Override
+            public void DataIsEmpty() {
+
+            }
+
+            @Override
+            public void UserFound(UserModel getuser) {
+
             }
         });
 
