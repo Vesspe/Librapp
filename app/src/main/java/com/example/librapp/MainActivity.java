@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.inputmethod.InputMethodManager;
@@ -12,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -19,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -35,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private NavigationView navigationView;
     private TextView authorTextView, titleTextView, userEmail;
+    private static final String TAG = "MyActivity";
+    private String token;
+
 
 
     @Override
@@ -86,16 +94,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser== null) {
+        if (currentUser == null) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         }
         updateUI(currentUser);
 
     }
+
+    public String getToken(){
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+                        String token = task.getResult().getToken();
+                    }
+                });
+
+        return token;
+    }
+
+    //TODO
+    /*public void onNewToken(String token){
+        sendRegistrationToServer(token);
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -111,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public void updateUI(FirebaseUser user){
+    public void updateUI(FirebaseUser user) {
         View headerView = navigationView.getHeaderView(0);
         userEmail = headerView.findViewById(R.id.userEmail);
         userEmail.setText(user.getEmail());
@@ -120,6 +149,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    public void logout(View view) {
+        //TODO some warning before logout
+        mAuth.signOut();
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+}
 
     //simple method to fill db
     /*public void send(View view) {  //fill db for tests
@@ -137,12 +174,7 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
 
-    public void logout(View view) {
-        //TODO some warning before logout
-        mAuth.signOut();
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(intent);
-    }
+
 
     /*private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -162,4 +194,4 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-}
+
