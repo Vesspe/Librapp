@@ -16,9 +16,9 @@
 
     <TextView
         android:id="@+id/isbn_textView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        tools:text="TextView"
         android:typeface="monospace"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -26,19 +26,22 @@
 
     <TextView
         android:id="@+id/title_textView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        tools:text="TitleTextView"
         android:textSize="20sp"
+        android:ellipsize="end"
+        android:maxLines="1"
         app:layout_constraintStart_toEndOf="@+id/book_imageView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/author_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        tools:text="TextView"
         android:textStyle="italic"
         app:layout_constraintStart_toEndOf="@+id/book_imageView"
         app:layout_constraintTop_toBottomOf="@+id/title_textView" />
@@ -48,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        tools:text="TextView"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/book_imageView"
         app:layout_constraintTop_toBottomOf="@+id/author_textView" />
