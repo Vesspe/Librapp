@@ -1,8 +1,10 @@
 package com.example.librapp;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -16,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +44,7 @@ public class BookDetailsActivity extends AppCompatActivity {
         bookModel = (BookModel) intent.getSerializableExtra("Book");
         TextView bookDesc = findViewById(R.id.textView_book_desc);
         bookDesc.setText(bookModel.getDesc());
+        ImageView imageView = findViewById(R.id.imageView_book_details);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -51,7 +55,12 @@ public class BookDetailsActivity extends AppCompatActivity {
                 .setDrawerLayout(drawer)
                 .build();
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+
+        Glide.with(this)
+                .load(bookModel.getImage())
+                .override(512,512)
+                .into(imageView);
+        /*FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,7 +68,7 @@ public class BookDetailsActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
                 finish();
             }
-        });
+        });*/
 
 
     }

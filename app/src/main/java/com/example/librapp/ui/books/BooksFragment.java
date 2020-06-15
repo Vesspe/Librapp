@@ -80,7 +80,7 @@ public class BooksFragment extends Fragment {
                             }
                         }
                         progressBar.setVisibility(View.GONE);
-                        new RecyclerViewConfig().setConfig(mRecyclerView, getActivity(), userBookList, borrowedKeys);
+                        new RecyclerViewConfig().setConfig(mRecyclerView, getActivity(), userBookList, borrowedKeys, rentBookModels);
                     }
 
                     @Override

@@ -9,27 +9,26 @@ public class BookModel implements Serializable {
     String isbn;
     String category;
     String desc;
+    String image;
 
 
     //TODO future ideas
     /*
     double rating;
-    String image;;*/
+    int popularity;*/
 
 
-    //to create an empty list object
+
     public BookModel() {
-
     }
 
-
-
-    public BookModel(String author, String title, String isbn, String category, String desc) {
+    public BookModel(String author, String title, String isbn, String category, String desc, String image) {
         this.author = author;
         this.title = title;
         this.isbn = isbn;
         this.category = category;
-        this. desc = desc;
+        this.desc = desc;
+        this.image = image;
     }
 
 
@@ -71,6 +70,14 @@ public class BookModel implements Serializable {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.librapp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -64,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        getWindow().setStatusBarColor(Color.WHITE);
         updateUI(currentUser);
     }
 

@@ -49,11 +49,20 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
+    public void returnToLogin(View v){
+        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+        startActivity(intent);
+    }
+
     public void Register(View view) {
         final String email = emailText.getText().toString();
         final String name =  nameText.getText().toString();
         String password = passwordText.getText().toString();
         String passwordConfirm = passwordTextConfirm.getText().toString();
+        if (TextUtils.isEmpty(name)) {
+            Toast.makeText(getApplicationContext(), "Enter Your name!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
@@ -64,6 +73,12 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if (TextUtils.isEmpty(passwordConfirm)) {
+            Toast.makeText(getApplicationContext(), "Enter password confirmation!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
 
         if (password.length() < 8) {
             Toast.makeText(getApplicationContext(), "Password too short, enter minimum 8 characters!", Toast.LENGTH_SHORT).show();
@@ -103,6 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 startActivity(intent);
 
                             } else {
+
                                 //sign in fail
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                 Toast.makeText(RegisterActivity.this, "Something went wrong, please try again in a moment",
@@ -111,5 +127,10 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
         }
+        else{
+            Toast.makeText(getApplicationContext(), "Please make sure your passwords match ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
     }
 }

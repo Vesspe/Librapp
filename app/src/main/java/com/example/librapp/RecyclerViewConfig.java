@@ -7,13 +7,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -23,7 +31,13 @@ public class RecyclerViewConfig extends FragmentActivity {
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter bookAdapter;
     private View.OnClickListener onItemClickListener;
+    private List<RentBookModel> rentBookModelsList = new ArrayList<>();
+
+
+    //might remove later
     private List<BookModel> secondlist;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -34,8 +48,9 @@ public class RecyclerViewConfig extends FragmentActivity {
         recyclerView.setLayoutManager(layoutManager);
 
     }
-
-    public void setConfig(RecyclerView recyclerView, Context context, List<BookModel> bookModels, List<String> keys){
+    //default constructor.
+    public void setConfig(RecyclerView recyclerView, Context context,
+                          List<BookModel> bookModels, List<String> keys){
         mContext = context;
         bookAdapter = new BookAdapter(bookModels, keys);
         this.recyclerView = recyclerView;
@@ -43,11 +58,26 @@ public class RecyclerViewConfig extends FragmentActivity {
         this.recyclerView.setAdapter(bookAdapter);
     }
 
+
+    //constructor to pass borrow date
+    public void setConfig(RecyclerView recyclerView, Context context,
+                          List<BookModel> bookModels, List<String> keys,
+                          List<RentBookModel> rentBookModels ){
+        mContext = context;
+
+        bookAdapter = new BookAdapter(bookModels, keys);
+        this.recyclerView = recyclerView;
+        this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        this.recyclerView.setAdapter(bookAdapter);
+        this.rentBookModelsList = rentBookModels;
+    }
+
     class BookItemView extends RecyclerView.ViewHolder{
         private TextView mTitle;
         private TextView mAuthor;
         private TextView mIsbn;
         private TextView mCategory;
+        private ImageView mImage;
         private String key;
 
         public BookItemView(@NonNull View itemView) {
@@ -56,6 +86,7 @@ public class RecyclerViewConfig extends FragmentActivity {
             mAuthor = itemView.findViewById(R.id.author_textView);
             mCategory = itemView.findViewById(R.id.category_textView);
             mIsbn = itemView.findViewById(R.id.isbn_textView);
+            mImage = itemView.findViewById(R.id.book_imageView);
             itemView.setOnClickListener(onItemClickListener);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -72,11 +103,33 @@ public class RecyclerViewConfig extends FragmentActivity {
 
 
 
-        public void bind (BookModel bookModel, String key){
+        public void bind (BookModel bookModel, String key, int position){
             mTitle.setText(bookModel.getTitle());
             mAuthor.setText(bookModel.getAuthor());
             mCategory.setText(bookModel.getCategory());
-            mIsbn.setText(bookModel.getIsbn());
+            if(!rentBookModelsList.isEmpty())
+            {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = rentBookModelsList.get(position).getDatetime();
+                Calendar c = Calendar.getInstance();
+                c.setTime(date);
+                c.add(Calendar.DATE, 14);
+                String formatedDate = formatter.format(c.getTime());
+
+                mIsbn.setText("Due to: " + formatedDate);
+            }else {
+                mIsbn.setText(bookModel.getIsbn());
+            }
+            //check for null in image field
+            if(mImage != null){
+                Glide.with(itemView)
+                        .load(bookModel.getImage())
+                        .into(mImage);
+            }else {
+                Glide.with(itemView)
+                        .load("https://www.tutorialspoint.com/images/tp-logo-diamond.png")
+                        .into(mImage);
+            }
             this.key = key;
 
         }
@@ -107,9 +160,10 @@ public class RecyclerViewConfig extends FragmentActivity {
 
         @Override
         public void onBindViewHolder(@NonNull BookItemView holder, final int position) {
-            holder.bind(mBookModelList.get(position), mKeys.get(position));
+            holder.bind(mBookModelList.get(position), mKeys.get(position), position);
 
         }
+
 
         @Override
         public int getItemCount() {

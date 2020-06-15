@@ -121,7 +121,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void DataIsEmpty() {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getContext(), "No books founded", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "No books found", Toast.LENGTH_LONG).show();
                     }
 
                     @Override

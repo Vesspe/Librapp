@@ -67,12 +67,25 @@
 
     <Button
         android:id="@+id/buttonRegister"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="Register"
         android:onClick="Register"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/buttonRegisterReturn"
         app:layout_constraintTop_toBottomOf="@+id/passwordRegisterConfirm" />
+
+    <Button
+        android:id="@+id/buttonRegisterReturn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toStartOf="@id/buttonRegister"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordRegisterConfirm"
+        android:text="Return"
+        android:onClick="returnToLogin"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
