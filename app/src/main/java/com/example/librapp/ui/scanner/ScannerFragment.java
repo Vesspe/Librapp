@@ -119,11 +119,6 @@ public class ScannerFragment extends Fragment implements ZXingScannerView.Result
             public void DataIsEmpty() {
 
             }
-
-            @Override
-            public void UserFound(UserModel getuser) {
-
-            }
         }, query);
     }
 

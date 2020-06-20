@@ -44,4 +44,9 @@
 
     <string name="rent_button">Borrow book</string>
     <string name="borrowBook">Borrow book</string>
+    <string name="channel_name">notificationChannelName</string>
+    <string name="channel_desc">channelDescription</string>
+    <string name="title_activity_rented_book_details">RentedBookDetailsActivity</string>
+    <!-- Strings used for fragments for navigation -->
+
 </resources>

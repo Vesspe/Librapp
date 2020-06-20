@@ -92,11 +92,6 @@ public class BooksFragment extends Fragment {
                     public void DataIsEmpty() {
 
                     }
-
-                    @Override
-                    public void UserFound(UserModel getuser) {
-
-                    }
                 });
                 //progressBar.setVisibility(View.GONE);
                 //new RecyclerViewConfig().setConfig(mRecyclerView, getActivity(), bookModels, keys);
@@ -107,10 +102,6 @@ public class BooksFragment extends Fragment {
 
             }
 
-            @Override
-            public void UserFound(UserModel getuser) {
-
-            }
         }, mAuth.getCurrentUser().getUid());
 
 

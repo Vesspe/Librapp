@@ -39,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth mAuth;
     private NavigationView navigationView;
-    private TextView authorTextView, titleTextView, userEmail;
+    private TextView userRole;
+    //authorTextView, titleTextView,
     private static final String TAG = "MyActivity";
     private String token;
 
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         }
-        updateUI(currentUser);
+        updateUI();
 
     }
 
@@ -140,15 +141,20 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public void updateUI(FirebaseUser user) {
+    public void updateUI() {
         View headerView = navigationView.getHeaderView(0);
-        userEmail = headerView.findViewById(R.id.userEmail);
-        userEmail.setText(user.getEmail());
-        TextView username = headerView.findViewById(R.id.userName);
-        username.setText(user.getDisplayName());
+        userRole = headerView.findViewById(R.id.userRole);
+        final TextView username = headerView.findViewById(R.id.userName);
 
-
+        new FirebaseDatabaseHelper().FindUser(new FirebaseDatabaseHelper.userStatus() {
+            @Override
+            public void UserIsFound(UserModel user) {
+                userRole.setText(user.getRole());
+                username.setText(user.getName());
+            }
+        });
     }
+
     public void logout(View view) {
         //TODO some warning before logout
         mAuth.signOut();
@@ -176,21 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    /*private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }*/
+
 
 
 

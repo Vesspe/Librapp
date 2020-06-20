@@ -58,24 +58,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         itemDecorator.setDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.divider));
 
         mRecyclerView.addItemDecoration(itemDecorator);
-        /*mRecyclerView.addOnItemTouchListener(
-                new RecyclerView.OnItemTouchListener() {
-                    @Override
-                    public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-                        Toast.makeText(getContext(), "yas", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-                    }
-                }
-        );*/
 
         searchViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -122,11 +104,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                     public void DataIsEmpty() {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getContext(), "No books found", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void UserFound(UserModel getuser) {
-
                     }
                 }, query);
                 InputMethodManager inputMethodManager = (InputMethodManager) root.getContext().getSystemService(INPUT_METHOD_SERVICE);

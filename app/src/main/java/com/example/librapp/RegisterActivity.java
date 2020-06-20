@@ -97,7 +97,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 Toast.makeText(context, "Welcome!", Toast.LENGTH_SHORT).show();
 
                                 //creating user in database
-                                UserModel newUser = new UserModel(mAuth.getCurrentUser().getUid(), email,name);
+                                String role = "user";
+                                UserModel newUser = new UserModel(mAuth.getCurrentUser().getUid(), email,name, role);
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference myRef = database.getReference();
                                 myRef.child("Users")

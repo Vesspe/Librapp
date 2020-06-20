@@ -8,11 +8,15 @@ public class UserModel {
     private String uid;
     private String email;
     private String name;
+    private String role;
 
-    public UserModel(String uid, String email, String name){
+
+
+    public UserModel(String uid, String email, String name, String role){
         this.uid = uid;
         this.email = email;
         this.name = name;
+        this.role = role;
     }
 
     public UserModel(){
@@ -41,6 +45,14 @@ public class UserModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
 }

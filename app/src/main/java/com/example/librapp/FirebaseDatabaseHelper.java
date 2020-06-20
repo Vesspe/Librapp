@@ -5,6 +5,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,18 +22,42 @@ public class FirebaseDatabaseHelper {
     private DatabaseReference mReference;
     private List<BookModel> bookModels = new ArrayList<>();
     private List<RentBookModel> rentBookModelList = new ArrayList<>();
-    private UserModel getuser;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public interface dataStatus{
         void DataIsLoaded(List<BookModel> bookModels, List<String> keys);
         void DataIsLoaded(List<RentBookModel> rentBookModels);
         void DataIsEmpty();
-        void UserFound(UserModel getuser);
+    }
+
+    public interface userStatus{
+        void UserIsFound(UserModel user);
+
     }
 
     public FirebaseDatabaseHelper() {
         this.mDatabase = FirebaseDatabase.getInstance();
-        //this.mReference = mDatabase.getReference("Books");
+    }
+
+    public void FindUser(final userStatus userStatus){
+        //getting reference to database table, in this case users
+        mReference = mDatabase.getReference("Users");
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot keyNode : dataSnapshot.getChildren()){
+                    UserModel userModel = keyNode.getValue(UserModel.class);
+                    if(userModel.getUid().equals(mAuth.getCurrentUser().getUid())){
+                        userStatus.UserIsFound(userModel);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
@@ -87,6 +112,8 @@ public class FirebaseDatabaseHelper {
         });
     }
 
+
+    //looking for user borrowed books
     public void searchUserBooks(final dataStatus dataStatus, final String uid){
 
         mReference = mDatabase.getReference("BorrowedBooks");
@@ -111,68 +138,9 @@ public class FirebaseDatabaseHelper {
 
             }
         });
-
-
-        /*mReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                bookModels.clear();
-                for(DataSnapshot keyNode : dataSnapshot.getChildren()) {
-                    RentBookModel rentBookModel = keyNode.getValue(RentBookModel.class);
-                    if(rentBookModel.getUid().equals(uid)){
-
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });*/
-
-    }
-
-    //get user data (id, email and name)
-    public void getUser(final dataStatus dataStatus, final String id){
-        //mReference = mDatabase.getReference("Users");
-        FirebaseDatabase.getInstance().getReference("Users")
-                .equalTo(id)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        UserModel user = dataSnapshot.getValue(UserModel.class);
-                        dataStatus.UserFound(user);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-
-
-
-
-        /*mReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot keyNode : dataSnapshot.getChildren()){
-
-                    UserModel user = keyNode.getValue(UserModel.class);
-                    if(user.getUid().equals(id)){
-                        getuser = new UserModel(user.getUid(), user.getEmail(), user.getName(), user.getUserBorrowedBooks());
-                    }
-                    //dataStatus.UserFound(getuser);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });*/
     }
 }
+
+
+
+

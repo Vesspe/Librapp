@@ -56,11 +56,6 @@ public class HomeFragment extends Fragment {
             public void DataIsEmpty() {
 
             }
-
-            @Override
-            public void UserFound(UserModel getuser) {
-
-            }
         });
 
         return root;

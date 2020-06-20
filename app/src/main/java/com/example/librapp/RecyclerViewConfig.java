@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -92,11 +93,19 @@ public class RecyclerViewConfig extends FragmentActivity {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e("clicked", "position"+getAdapterPosition());
+                    Log.e("clicked", "position "+getAdapterPosition());
                     BookModel bookModel = secondlist.get(getAdapterPosition());
-                    Intent intent = new Intent (v.getContext(), BookDetailsActivity.class);
-                    intent.putExtra("Book", bookModel);
-                    v.getContext().startActivity(intent);
+
+                    if(rentBookModelsList.isEmpty()){
+                        Intent intent = new Intent (v.getContext(), BookDetailsActivity.class);
+                        intent.putExtra("Book", bookModel);
+                        v.getContext().startActivity(intent);
+                    }else
+                    {
+                        Intent intent = new Intent (v.getContext(), RentedBookDetailsActivity.class);
+                        intent.putExtra("Book", bookModel );
+                    }
+
                 }
             });
         }
