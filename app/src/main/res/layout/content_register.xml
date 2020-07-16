@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:id="@+id/registerLayout">
 
     <TextView
         android:id="@+id/welcome"
@@ -74,7 +75,8 @@
         android:onClick="Register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/buttonRegisterReturn"
-        app:layout_constraintTop_toBottomOf="@+id/passwordRegisterConfirm" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordRegisterConfirm"
+        />
 
     <Button
         android:id="@+id/buttonRegisterReturn"
@@ -84,8 +86,8 @@
         app:layout_constraintEnd_toStartOf="@id/buttonRegister"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordRegisterConfirm"
-        android:text="Return"
         android:onClick="returnToLogin"
+        android:text="Return"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.example.librapp;
 
 import android.content.Context;
 
+import androidx.annotation.ContentView;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -23,5 +24,8 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         assertEquals("com.example.librapp", appContext.getPackageName());
+
+
+
     }
 }

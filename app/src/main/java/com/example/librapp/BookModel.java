@@ -10,9 +10,10 @@ public class BookModel implements Serializable {
     String category;
     String desc;
     String image;
+    String views;
 
 
-    //TODO future ideas
+//TODO future ideas
     /*
     double rating;
     int popularity;*/
@@ -29,6 +30,8 @@ public class BookModel implements Serializable {
         this.category = category;
         this.desc = desc;
         this.image = image;
+        //views are always 0 when you add new one
+        this.views = "0";
     }
 
 
@@ -78,6 +81,14 @@ public class BookModel implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getViews() {
+        return views;
+    }
+
+    public void setViews(String views) {
+        this.views = views;
     }
 
 

@@ -4,38 +4,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.search.SearchFragment">
+    tools:context=".ui.search.SearchFragment"
+    android:id="@+id/fragmentSearch">
 
     <LinearLayout
         android:id="@+id/searchLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="40dp"
         app:layout_constraintTop_toTopOf="@+id/textView_search_info">
 
-        <EditText android:id="@+id/editText_search_book"
+        <EditText
+            android:id="@+id/editText_search_book"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:inputType="textCapSentences"/>
+            android:inputType="textCapSentences" />
 
-        <Button android:id="@+id/button_search_book"
+        <Button
+            android:id="@+id/button_search_book"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/searchBookButton"
-            />
+            android:text="@string/searchBookButton" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/spinnerLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchLayout">
+
+        <TextView
+            android:id="@+id/category_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingTop="8dp"
+            android:text="@string/category"
+            android:textSize="20sp"
+            />
+        <Spinner
+            android:id="@+id/spinnerCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView_search_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Wpisz dane autora lub tytuł szukanej książki"
         android:textAlignment="center"
         android:textSize="20sp"
-        android:text="Wpisz dane autora lub tytuł szukanej książki"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -44,9 +70,10 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="80dp"
-        app:layout_constraintStart_toStartOf="@+id/searchLayout"/>
+        android:layout_marginTop="130dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerLinearLayout"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/loading_books_pb"
@@ -57,7 +84,6 @@
         app:layout_constraintEnd_toEndOf="@+id/recyclerView"
         app:layout_constraintStart_toStartOf="@+id/recyclerView"
         app:layout_constraintTop_toTopOf="@+id/recyclerView" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

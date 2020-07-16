@@ -16,6 +16,11 @@
         android:name="com.example.librapp.ui.search.SearchFragment"
         android:label="@string/menu_search"
         tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/nav_reserved"
+        android:name="com.example.librapp.ui.reserverdBooks.ReservedBooksFragment"
+        android:label="Reserved Books"
+        tools:layout="@layout/reserved_books_fragment"/>
 
     <fragment
         android:id="@+id/nav_books"

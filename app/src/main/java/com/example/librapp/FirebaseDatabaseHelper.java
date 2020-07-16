@@ -1,5 +1,6 @@
 package com.example.librapp;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,12 +18,18 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Singleton;
+
 public class FirebaseDatabaseHelper {
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
     private List<BookModel> bookModels = new ArrayList<>();
     private List<RentBookModel> rentBookModelList = new ArrayList<>();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String TAG = "FirebaseDatabaseHelper";
+
+    private static FirebaseDatabaseHelper INSTANCE = null;
+
 
     public interface dataStatus{
         void DataIsLoaded(List<BookModel> bookModels, List<String> keys);
@@ -30,13 +37,50 @@ public class FirebaseDatabaseHelper {
         void DataIsEmpty();
     }
 
+    public interface dataChange{
+        void DataIsUpdated();
+    }
     public interface userStatus{
         void UserIsFound(UserModel user);
 
     }
 
+
+    /*@Singleton
+    private FirebaseDatabaseHelper(){
+        this.mDatabase = FirebaseDatabase.getInstance();
+    }
+
+    public static FirebaseDatabaseHelper getInstance()
+    {
+        if(INSTANCE == null) {
+            INSTANCE = new FirebaseDatabaseHelper();
+        }
+        return INSTANCE;
+    }*/
+
     public FirebaseDatabaseHelper() {
         this.mDatabase = FirebaseDatabase.getInstance();
+    }
+
+
+
+    //in progress...
+    public void DataIsUpdated(String isbn){
+        mReference = mDatabase.getReference("Books").child(isbn);
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                BookModel book = dataSnapshot.getValue(BookModel.class);
+                book.setViews(book.getViews() + 1);
+                //mReference.updateChildren(book);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void FindUser(final userStatus userStatus){
@@ -51,6 +95,7 @@ public class FirebaseDatabaseHelper {
                         userStatus.UserIsFound(userModel);
                     }
                 }
+                Log.i(TAG, "User found");
             }
 
             @Override
@@ -59,7 +104,6 @@ public class FirebaseDatabaseHelper {
             }
         });
     }
-
 
     //loading all books in database
     public void loadBooks(final dataStatus dataStatus){
@@ -75,6 +119,7 @@ public class FirebaseDatabaseHelper {
                     bookModels.add(bookModel);
                 }
                 dataStatus.DataIsLoaded(bookModels, keys);
+                Log.i(TAG, "Books loaded");
             }
 
             @Override
@@ -95,14 +140,19 @@ public class FirebaseDatabaseHelper {
                 for(DataSnapshot keyNode : dataSnapshot.getChildren()){
                     keys.add(keyNode.getKey());
                     BookModel bookModel = keyNode.getValue(BookModel.class);
-                    if(bookModel.getAuthor().equalsIgnoreCase(query)|| bookModel.getCategory().equalsIgnoreCase(query) || bookModel.getIsbn().equals(query) || bookModel.getTitle().equalsIgnoreCase(query)) {
+                    //if(bookModel.getAuthor().contains(query) || bookModel.getIsbn().equals(query) || bookModel.getTitle().equalsIgnoreCase(query)) {
+                      if(org.apache.commons.lang3.StringUtils.containsIgnoreCase(bookModel.getAuthor(), query) || org.apache.commons.lang3.StringUtils.containsIgnoreCase(bookModel.getTitle(), query))
+                      {
                         bookModels.add(bookModel);
                     }
                 }
                 if(bookModels.isEmpty()){
+                    Log.w(TAG, "Book not found");
                     dataStatus.DataIsEmpty();
-                }else
-                dataStatus.DataIsLoaded(bookModels, keys);
+                }else {
+                    Log.i(TAG, "Book found");
+                    dataStatus.DataIsLoaded(bookModels, keys);
+                }
             }
 
             @Override
@@ -130,6 +180,7 @@ public class FirebaseDatabaseHelper {
                     }
 
                 }
+                Log.i(TAG, "User books found");
                 dataStatus.DataIsLoaded(rentBookModelList);
             }
 

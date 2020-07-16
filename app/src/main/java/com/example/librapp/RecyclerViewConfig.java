@@ -9,10 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,10 +31,11 @@ public class RecyclerViewConfig extends FragmentActivity {
     private RecyclerView.Adapter bookAdapter;
     private View.OnClickListener onItemClickListener;
     private List<RentBookModel> rentBookModelsList = new ArrayList<>();
+    private String TAG = "RecyclerViewConfig";
 
 
-    //might remove later
-    private List<BookModel> secondlist;
+    //added to expand functionality of recycler
+    private List<BookModel> secondList;
 
 
 
@@ -76,7 +75,7 @@ public class RecyclerViewConfig extends FragmentActivity {
     class BookItemView extends RecyclerView.ViewHolder{
         private TextView mTitle;
         private TextView mAuthor;
-        private TextView mIsbn;
+        private TextView mViews;
         private TextView mCategory;
         private ImageView mImage;
         private String key;
@@ -86,32 +85,37 @@ public class RecyclerViewConfig extends FragmentActivity {
             mTitle = itemView.findViewById(R.id.title_textView);
             mAuthor = itemView.findViewById(R.id.author_textView);
             mCategory = itemView.findViewById(R.id.category_textView);
-            mIsbn = itemView.findViewById(R.id.isbn_textView);
+            mViews = itemView.findViewById(R.id.views_textView);
             mImage = itemView.findViewById(R.id.book_imageView);
             itemView.setOnClickListener(onItemClickListener);
 
+            //onclick in recyclerview
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e("clicked", "position "+getAdapterPosition());
-                    BookModel bookModel = secondlist.get(getAdapterPosition());
+                    Log.i(TAG, "clicked position: "+getAdapterPosition());
+                    BookModel bookModel = secondList.get(getAdapterPosition());
+                    //increment views on selected book
 
+
+                    //book is not rented/borrowed scenario
                     if(rentBookModelsList.isEmpty()){
                         Intent intent = new Intent (v.getContext(), BookDetailsActivity.class);
                         intent.putExtra("Book", bookModel);
                         v.getContext().startActivity(intent);
-                    }else
+                    }
+                    //book is rented/borrowed scenario
+                    else
                     {
                         Intent intent = new Intent (v.getContext(), RentedBookDetailsActivity.class);
                         intent.putExtra("Book", bookModel );
                     }
-
                 }
             });
         }
 
 
-
+        //bind data with recycler
         public void bind (BookModel bookModel, String key, int position){
             mTitle.setText(bookModel.getTitle());
             mAuthor.setText(bookModel.getAuthor());
@@ -124,11 +128,12 @@ public class RecyclerViewConfig extends FragmentActivity {
                 c.setTime(date);
                 c.add(Calendar.DATE, 14);
                 String formatedDate = formatter.format(c.getTime());
-
-                mIsbn.setText("Due to: " + formatedDate);
+                //its a data in this specyfic case  (at least for now)
+                mViews.setText("Due to: " + formatedDate);
             }else {
-                mIsbn.setText(bookModel.getIsbn());
+                mViews.setText("Views: " + bookModel.getViews());
             }
+
             //check for null in image field
             if(mImage != null){
                 Glide.with(itemView)
@@ -138,6 +143,7 @@ public class RecyclerViewConfig extends FragmentActivity {
                 Glide.with(itemView)
                         .load("https://www.tutorialspoint.com/images/tp-logo-diamond.png")
                         .into(mImage);
+                Log.w(TAG, "Loaded default image");
             }
             this.key = key;
 
@@ -157,7 +163,7 @@ public class RecyclerViewConfig extends FragmentActivity {
         {
             this.mBookModelList = mBookModelList;
             this.mKeys = mKeys;
-            secondlist = mBookModelList;
+            secondList = mBookModelList;
         }
 
         @NonNull
@@ -185,9 +191,6 @@ public class RecyclerViewConfig extends FragmentActivity {
 
 
     }
-
-
-
 
 }
 

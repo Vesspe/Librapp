@@ -22,6 +22,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class BookDetailsActivity extends AppCompatActivity {
     private BookModel bookModel;
     private String CHANNEL_ID = "0";
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private String TAG = "BookDetailsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +108,7 @@ public class BookDetailsActivity extends AppCompatActivity {
         int notificationId = 1;
         // notificationId is a unique int for each notification that you must define
         notificationManager.notify(notificationId, builder.build());
-
+        Log.i(TAG, "Notification sent");
         finish();
     }
 
@@ -136,17 +138,19 @@ public class BookDetailsActivity extends AppCompatActivity {
                         return;
                     }
                 }
-                DatabaseReference myRef = database.getReference("BorrowedBooks").push();
+                DatabaseReference myRef = database.getReference("ReservedBooks").push();
                 Date currentTime = Calendar.getInstance().getTime();
                 RentBookModel rentBook = new RentBookModel(bookId, currentTime, userId);
                 myRef.setValue(rentBook);
                 sendNotification();
 
+                Log.i(TAG, "Data is loaded");
+
             }
 
             @Override
             public void DataIsEmpty() {
-
+                Log.w(TAG, "Data is empty");
             }
         }, userId);
 
@@ -154,5 +158,6 @@ public class BookDetailsActivity extends AppCompatActivity {
 
     private void toast(){
         Toast.makeText(this, "You already have that book", Toast.LENGTH_LONG).show();
+        Log.i(TAG, "Book already borrowed");
     }
 }

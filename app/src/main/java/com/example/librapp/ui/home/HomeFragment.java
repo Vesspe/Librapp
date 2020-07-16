@@ -1,6 +1,7 @@
 package com.example.librapp.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private RecyclerView mRecyclerView;
+    private String TAG = "HomeFragment";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -40,11 +42,14 @@ public class HomeFragment extends Fragment {
         mRecyclerView.addItemDecoration(itemDecorator);
 
 
+
+
         new FirebaseDatabaseHelper().loadBooks(new FirebaseDatabaseHelper.dataStatus() {
             @Override
             public void DataIsLoaded(List<BookModel> bookModels, List<String> keys) {
                 root.findViewById(R.id.loading_books_pb).setVisibility(View.GONE);
                 new RecyclerViewConfig().setConfig(mRecyclerView, getActivity(), bookModels, keys);
+                Log.i(TAG, "Data loaded");
             }
 
             @Override
@@ -54,7 +59,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void DataIsEmpty() {
-
+                Log.w(TAG, "Data is empty");
             }
         });
 

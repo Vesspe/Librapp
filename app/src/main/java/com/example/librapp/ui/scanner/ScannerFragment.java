@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class ScannerFragment extends Fragment implements ZXingScannerView.Result
     private ScannerViewModel scannerViewModel;
     private ZXingScannerView scannerView;
     private TextView result;
+    private String TAG = "ScannerFragment";
 
     public static ScannerFragment newInstance() {
         return new ScannerFragment();
@@ -69,11 +71,12 @@ public class ScannerFragment extends Fragment implements ZXingScannerView.Result
                     public void onPermissionGranted(PermissionGrantedResponse response) {
                         scannerView.setResultHandler(ScannerFragment.this);
                         scannerView.startCamera();
+                        Log.i(TAG, "Permission Granted");
                     }
 
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse response) {
-                        Toast.makeText(getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                        Log.w(TAG, "Permission Denied");
                     }
 
                     @Override
@@ -107,6 +110,7 @@ public class ScannerFragment extends Fragment implements ZXingScannerView.Result
                 Intent intent = new Intent (getContext(), BookDetailsActivity.class);
                 intent.putExtra("Book", bookModel);
                 getContext().startActivity(intent);
+                Log.i(TAG, "Data is loaded");
 
             }
 
@@ -116,8 +120,8 @@ public class ScannerFragment extends Fragment implements ZXingScannerView.Result
             }
 
             @Override
-            public void DataIsEmpty() {
-
+            public void DataIsEmpty(){
+                Log.w(TAG, "Data is empty");
             }
         }, query);
     }

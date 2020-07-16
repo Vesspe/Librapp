@@ -9,4 +9,19 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+
+
+    <!--Spinner in search book fragment options-->
+    <string-array name="categories_array">
+        <item>All</item>
+        <item>Biography</item>
+        <item>Classics</item>
+        <item>Comics</item>
+        <item>Fantasy</item>
+        <item>Fiction</item>
+        <item>Horror</item>
+        <item>Romance</item>
+        <item>Science Fiction</item>
+        <item>Travel</item>
+    </string-array>
 </resources>

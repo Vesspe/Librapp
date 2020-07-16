@@ -1,6 +1,7 @@
 package com.example.librapp.ui.books;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class BooksFragment extends Fragment {
     private FirebaseAuth mAuth;
     private List<BookModel> userBookList = new ArrayList<>();
     private List<String> borrowedKeys = new ArrayList<>();
+    private String TAG = "BooksFragment";
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -58,6 +60,9 @@ public class BooksFragment extends Fragment {
         itemDecorator.setDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.divider));
         mRecyclerView.addItemDecoration(itemDecorator);
 
+        /*FirebaseDatabaseHelper help = FirebaseDatabaseHelper.getInstance();
+
+        help.searchUserBooks();*/
 
         new FirebaseDatabaseHelper().searchUserBooks(new FirebaseDatabaseHelper.dataStatus() {
             @Override
@@ -81,6 +86,7 @@ public class BooksFragment extends Fragment {
                         }
                         progressBar.setVisibility(View.GONE);
                         new RecyclerViewConfig().setConfig(mRecyclerView, getActivity(), userBookList, borrowedKeys, rentBookModels);
+                        Log.i(TAG, "Data loaded");
                     }
 
                     @Override
@@ -90,7 +96,7 @@ public class BooksFragment extends Fragment {
 
                     @Override
                     public void DataIsEmpty() {
-
+                        Log.w(TAG, "Data is empty");
                     }
                 });
                 //progressBar.setVisibility(View.GONE);
